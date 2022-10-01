@@ -1,35 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
   const [input, setInput] = useState({});
-
+  
   const history = useHistory();
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
 
- 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://localhost:5001/api/Authenticate/login/", {
-        ...input,
-      });
+      const res = await axios.post(
+        "https://localhost:5001/api/Authenticate/login/",
+        {
+          ...input,
+        }
+      );
       localStorage.setItem("token", res.data.token);
-      history.push("/dashboard");
-      window.location.reload()
+      // if(role == "Admin"){
+      history.push("/");
+      // }
+      // else{
+      // history.push("/order");
+      // }
+      window.location.reload();
     } catch (err) {
       alert("Incorrect email/passsword");
     }
   };
-  
 
   return (
     <>
@@ -67,7 +74,6 @@ const Login = () => {
             </Button>
           </Form>
         </Col>
-        
       </div>
     </>
   );
